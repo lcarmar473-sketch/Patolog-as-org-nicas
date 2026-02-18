@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Heart, 
   Brain, 
@@ -9,12 +9,12 @@ import {
   CheckCircle2, 
   XCircle, 
   RotateCcw, 
+  Info, 
   ShieldCheck, 
   Zap, 
   PhoneCall, 
   Activity, 
-  ChevronRight,
-  Clock
+  ChevronRight 
 } from 'lucide-react';
 
 const App = () => {
@@ -30,112 +30,112 @@ const App = () => {
     {
       id: 'cardio',
       title: 'Urgencias Cardiovasculares',
-      subtitle: 'Infarto (IAM)',
-      icon: <Heart className="text-red-500" />,
+      subtitle: 'Infarto Agudo de Miocardio (IAM)',
+      icon: <Heart className="text-red-600" />,
       color: 'border-red-500',
       bgColor: 'bg-red-50',
       symptoms: [
-        'Dolor opresivo en el centro del pecho.',
-        'Irradiación a brazo izquierdo o mandíbula.',
-        'Piel pálida, sudorosa y náuseas.',
-        'Dificultad para respirar.'
+        'Dolor opresivo retroesternal (centro del pecho).',
+        'Irradiación a brazo izquierdo, mandíbula o espalda.',
+        'Sudoración fría (diaforesis) y náuseas.',
+        'Sensación de muerte inminente.'
       ],
       actions: [
-        { step: 'Reposo absoluto', text: 'Sentar al paciente con la espalda apoyada.' },
-        { step: 'Aviso al 112', text: 'Indicar sospecha de infarto inmediatamente.' },
-        { step: 'Aflojar ropa', text: 'Liberar cuello y cintura para facilitar la circulación.' },
-        { step: 'No dejar solo', text: 'Vigilar consciencia por si entra en parada (PCR).' }
+        { step: 'Reposo', text: 'Sentar a la víctima con la espalda apoyada para reducir el esfuerzo cardíaco.' },
+        { step: 'Llamada 112', text: 'Indicar sospecha de síndrome coronario agudo (Código Infarto).' },
+        { step: 'Confort', text: 'Aflojar prendas que opriman el cuello y tórax.' },
+        { step: 'Vigilancia', text: 'Controlar pulso. Si hay PCR, iniciar RCP inmediata.' }
       ]
     },
     {
       id: 'neuro',
       title: 'Urgencias Neurológicas',
       subtitle: 'Ictus / ACV',
-      icon: <Brain className="text-purple-500" />,
+      icon: <Brain className="text-purple-600" />,
       color: 'border-purple-500',
       bgColor: 'bg-purple-50',
       symptoms: [
-        'Boca torcida o asimetría facial.',
-        'Falta de fuerza en un brazo o pierna.',
-        'Dificultad para hablar o entender.',
-        'Dolor de cabeza muy intenso y súbito.'
+        'Pérdida de fuerza súbita en un lado del cuerpo.',
+        'Desviación de la comisura bucal (boca torcida).',
+        'Dificultad severa para hablar o comprender.',
+        'Pérdida de visión o dolor de cabeza explosivo.'
       ],
       actions: [
-        { step: 'Detección FAST', text: 'Pedir que sonría, levante brazos y hable.' },
-        { step: 'Anotar hora', text: 'Es vital saber cuándo empezaron los síntomas.' },
-        { step: 'Posición', text: 'Cabeza elevada 30º si está consciente.' },
-        { step: 'Traslado urgente', text: 'Llamar al 112: Código Ictus activado.' }
+        { step: 'Evaluación FAST', text: 'Comprobar cara, brazos y habla inmediatamente.' },
+        { step: 'Hora de Inicio', text: 'Fundamental anotar cuándo empezó el primer síntoma.' },
+        { step: 'Posición', text: 'Cabeza elevada unos 30º si está consciente.' },
+        { step: 'Traslado', text: 'Aviso urgente al 112 para activar el Código Ictus.' }
       ]
     },
     {
       id: 'resp',
       title: 'Urgencias Respiratorias',
-      subtitle: 'Crisis Asmática',
-      icon: <Wind className="text-blue-500" />,
+      subtitle: 'Crisis Asmática / EPOC',
+      icon: <Wind className="text-blue-600" />,
       color: 'border-blue-500',
       bgColor: 'bg-blue-50',
       symptoms: [
-        'Pitos (sibilancias) al respirar.',
-        'Sensación de ahogo o opresión.',
-        'Tos seca persistente.',
-        'Dificultad para terminar frases.'
+        'Disnea intensa (dificultad para respirar).',
+        'Sibilancias audibles (pitos) en la espiración.',
+        'Ansiedad y uso de músculos accesorios.',
+        'Imposibilidad de completar frases largas.'
       ],
       actions: [
-        { step: 'Posición Fowler', text: 'Sentado inclinado hacia delante.' },
-        { step: 'Medicación', text: 'Ayudar con su inhalador de rescate.' },
-        { step: 'Tranquilizar', text: 'El pánico empeora la falta de aire.' },
-        { step: 'Ambiente limpio', text: 'Alejar de humos o alérgenos.' }
+        { step: 'Postura Fowler', text: 'Sentado inclinado hacia delante con brazos apoyados.' },
+        { step: 'Medicación', text: 'Ayudar al paciente con su inhalador de rescate.' },
+        { step: 'Entorno', text: 'Asegurar aire fresco y ventilado.' },
+        { step: 'Tranquilizar', text: 'Mantener la calma para evitar el cierre de la vía aérea.' }
       ]
     },
     {
       id: 'endo',
       title: 'Urgencias Endocrinas',
-      subtitle: 'Hipoglucemia',
-      icon: <Droplet className="text-amber-500" />,
+      subtitle: 'Crisis Glucémica (Hipoglucemia)',
+      icon: <Droplet className="text-amber-600" />,
       color: 'border-amber-500',
       bgColor: 'bg-amber-50',
       symptoms: [
-        'Sudor frío y temblor.',
-        'Confusión o comportamiento extraño.',
-        'Hambre repentina y debilidad.',
-        'Visión borrosa.'
+        'Piel pálida, sudorosa y fría.',
+        'Temblor, hambre intensa y debilidad extrema.',
+        'Cambios de humor o agresividad.',
+        'Visión borrosa y mareos.'
       ],
       actions: [
-        { step: 'Azúcar rápido', text: 'Dar zumo o azúcar si está consciente.' },
-        { step: 'Regla del 15', text: 'Esperar 15 min y repetir si no mejora.' },
-        { step: 'Inconsciente', text: 'Posición Lateral de Seguridad (PLS). No dar comida.' },
-        { step: 'Aviso médico', text: 'Si no recupera la consciencia tras el azúcar.' }
+        { step: 'Consciencia', text: 'Si traga bien: administrar 15g de azúcar (zumo, azucarillo).' },
+        { step: 'Espera 15', text: 'Esperar 15 minutos y repetir si persiste.' },
+        { step: 'Inconsciencia', text: 'NUNCA dar líquidos. Poner en PLS y llamar al 112.' },
+        { step: 'Seguridad', text: 'Evitar esfuerzos físicos inmediatos.' }
       ]
     }
   ];
 
   const quiz = [
     {
-      case: "Un hombre se lleva la mano al pecho, suda frío y dice que el dolor le llega hasta la mandíbula.",
-      options: ["Tumbarlo con los pies en alto", "Sentarlo apoyado y llamar al 112", "Darle un vaso de agua con azúcar", "Hacer que camine para calmarse"],
+      case: "Hombre de 55 años con dolor intenso en el pecho. Dice que siente 'fuego' y el dolor sube a su mandíbula.",
+      options: ["Elevar piernas y dar agua", "Posición semisentado y llamar 112", "Caminar para calmar el dolor", "Administrar inhalador"],
       correct: 1,
-      tip: "En el infarto, el corazón debe trabajar lo menos posible. La posición semisentada y el reposo son críticos."
+      tip: "En sospecha de Infarto, el reposo total en posición semisentado reduce la carga del corazón."
     },
     {
-      case: "Ves a una mujer que no puede levantar el brazo derecho y al hablar parece confundida.",
-      options: ["Esperar 30 minutos a ver si mejora", "Darle una aspirina", "Anotar la hora y llamar al 112", "Darle un masaje en el brazo"],
+      case: "Mujer joven con sibilancias fuertes tras correr. No puede hablar sin jadear.",
+      options: ["Tumbarla boca arriba", "Aplicar compresas frías", "Posición de Fowler y ayudar con inhalador", "Realizar RCP"],
       correct: 2,
-      tip: "Ante signos de Ictus, el tiempo es vital. Anotar la hora de inicio ayuda a los médicos a aplicar el tratamiento adecuado."
+      tip: "La posición de Fowler facilita el trabajo del diafragma en crisis respiratorias."
     },
     {
-      case: "Un alumno diabético empieza a sudar frío, tiembla y parece muy irritado.",
-      options: ["Darle un caramelo o zumo de inmediato", "Administrarle una inyección de insulina", "Hacer que se tumbe boca arriba", "Llevarlo a correr para quemar energía"],
+      case: "Compañero de trabajo que empieza a hablar de forma incoherente, suda frío y tiembla.",
+      options: ["Darle un zumo si puede tragar", "Administrar insulina", "Dejarle dormir", "Golpes en la espalda"],
       correct: 0,
-      tip: "La hipoglucemia requiere azúcar rápido. Nunca des insulina si no eres personal médico o estás seguro del nivel de glucosa."
+      tip: "Ante síntomas de hipoglucemia, el azúcar rápido es la prioridad si está consciente."
     }
   ];
 
   const handleAnswer = (idx) => {
-    if (feedback !== null) return;
+    if (feedback) return;
     const isCorrect = idx === quiz[currentQuestion].correct;
     if (isCorrect) setScore(score + 1);
     setFeedback(isCorrect ? 'correct' : 'incorrect');
-
+    
     setTimeout(() => {
       setFeedback(null);
       if (currentQuestion + 1 < quiz.length) {
@@ -143,189 +143,200 @@ const App = () => {
       } else {
         setShowResult(true);
       }
-    }, 3000);
+    }, 2000);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 font-sans text-slate-900">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans p-4">
       <div className="max-w-4xl mx-auto">
-        
-        {/* Encabezado */}
+        {/* Header */}
         <header className="bg-white rounded-2xl p-6 shadow-sm border-b-4 border-indigo-600 mb-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-              <h1 className="text-2xl font-black flex items-center gap-2">
-                <Stethoscope className="text-indigo-600" /> SIMULADOR RA2.G
+              <h1 className="text-2xl font-black text-indigo-900 flex items-center gap-2">
+                <Activity className="text-indigo-600" /> SIMULADOR ORGÁNICO
               </h1>
-              <p className="text-slate-500 font-medium">Primeros Auxilios: Patologías Orgánicas</p>
+              <p className="text-slate-500 font-medium">RA2.g - Protocolos de Primeros Auxilios</p>
             </div>
-            <nav className="flex bg-slate-100 p-1 rounded-xl">
+            <div className="flex bg-slate-100 p-1 rounded-xl">
               <button 
                 onClick={() => setActiveTab('learning')}
-                className={`px-4 py-2 rounded-lg text-sm font-bold transition ${activeTab === 'learning' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}
+                className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeTab === 'learning' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}
               >
                 Protocolos
               </button>
               <button 
                 onClick={() => setActiveTab('quiz')}
-                className={`px-4 py-2 rounded-lg text-sm font-bold transition ${activeTab === 'quiz' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}
+                className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeTab === 'quiz' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500'}`}
               >
                 Simulador
               </button>
-            </nav>
+            </div>
           </div>
         </header>
 
-        {/* Contenido Principal */}
-        <main>
-          {activeTab === 'learning' ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Sidebar */}
-              <div className="space-y-3">
-                {pathologies.map(p => (
-                  <button 
-                    key={p.id}
-                    onClick={() => setSelectedPathology(p)}
-                    className={`w-full p-4 rounded-xl border-2 flex items-center gap-4 transition shadow-sm ${selectedPathology?.id === p.id ? 'bg-white border-indigo-500' : 'bg-white border-transparent hover:border-slate-200'}`}
-                  >
-                    <div className={`${p.bgColor} p-2 rounded-lg`}>{p.icon}</div>
-                    <span className="font-bold text-sm text-left">{p.subtitle}</span>
-                  </button>
-                ))}
-              </div>
-
-              {/* Detalle */}
-              <div className="md:col-span-2">
-                {selectedPathology ? (
-                  <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-200 animate-in fade-in slide-in-from-bottom-2">
-                    <div className={`p-6 ${selectedPathology.bgColor} border-b border-slate-100`}>
-                      <h2 className="text-xl font-black uppercase flex items-center gap-2">
-                        {selectedPathology.icon} {selectedPathology.subtitle}
-                      </h2>
-                    </div>
-                    <div className="p-6 space-y-8">
-                      <section>
-                        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                          <Activity size={14} /> Sintomatología
-                        </h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          {selectedPathology.symptoms.map((s, i) => (
-                            <div key={i} className="flex items-center gap-2 text-sm bg-slate-50 p-3 rounded-lg border border-slate-100">
-                              <div className="w-1.5 h-1.5 rounded-full bg-slate-400" /> {s}
-                            </div>
-                          ))}
-                        </div>
-                      </section>
-
-                      <section>
-                        <h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                          <ShieldCheck size={14} /> Actuación de Primeros Auxilios
-                        </h3>
-                        <div className="space-y-3">
-                          {selectedPathology.actions.map((a, i) => (
-                            <div key={i} className="flex gap-4 p-4 bg-indigo-50/50 rounded-xl border border-indigo-100">
-                              <span className="font-black text-indigo-300">0{i+1}</span>
-                              <div>
-                                <p className="font-bold text-indigo-900 text-sm leading-none mb-1">{a.step}</p>
-                                <p className="text-sm text-indigo-700">{a.text}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </section>
-                    </div>
+        {activeTab === 'learning' ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-3">
+              <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Patologías</h3>
+              {pathologies.map((patho) => (
+                <button
+                  key={patho.id}
+                  onClick={() => setSelectedPathology(patho)}
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-3 ${selectedPathology?.id === patho.id ? 'border-indigo-500 bg-white ring-4 ring-indigo-50' : 'border-white bg-white hover:border-slate-200'}`}
+                >
+                  <div className={`p-2 rounded-lg ${patho.bgColor}`}>{patho.icon}</div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter leading-none mb-1">{patho.subtitle}</p>
+                    <p className="font-bold text-sm leading-tight">{patho.title}</p>
                   </div>
-                ) : (
-                  <div className="h-full bg-white rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-slate-400">
-                    <Stethoscope size={48} className="mb-4 opacity-20" />
-                    <p className="text-center font-medium">Selecciona una patología para ver el protocolo de actuación.</p>
-                  </div>
-                )}
-              </div>
+                </button>
+              ))}
             </div>
-          ) : (
-            <div className="max-w-2xl mx-auto">
-              {!quizStarted ? (
-                <div className="bg-white p-12 rounded-3xl shadow-xl text-center">
-                  <div className="w-20 h-20 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg rotate-3">
-                    <Zap size={40} />
+
+            <div className="md:col-span-2">
+              {selectedPathology ? (
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden animate-in fade-in slide-in-from-bottom-4">
+                  <div className={`p-6 border-b ${selectedPathology.bgColor}`}>
+                    <div className="flex items-center gap-3 mb-2">
+                      {selectedPathology.icon}
+                      <span className="text-xs font-black uppercase tracking-widest text-slate-500">{selectedPathology.subtitle}</span>
+                    </div>
+                    <h2 className="text-2xl font-black">{selectedPathology.title}</h2>
                   </div>
-                  <h2 className="text-3xl font-black mb-4">Simulador de Casos</h2>
-                  <p className="text-slate-500 mb-8">Pon a prueba tu capacidad de reacción ante urgencias reales.</p>
-                  <button 
-                    onClick={() => setQuizStarted(true)}
-                    className="w-full bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-indigo-600 transition shadow-lg"
-                  >
-                    COMENZAR ENTRENAMIENTO
-                  </button>
-                </div>
-              ) : showResult ? (
-                <div className="bg-white p-12 rounded-3xl shadow-xl text-center">
-                  <h3 className="text-5xl font-black text-indigo-600 mb-2">{score}/{quiz.length}</h3>
-                  <p className="text-slate-500 mb-8 font-bold uppercase tracking-widest">Resultado de la simulación</p>
-                  <button 
-                    onClick={() => {setQuizStarted(false); setShowResult(false); setScore(0); setCurrentQuestion(0);}}
-                    className="flex items-center gap-2 bg-slate-900 text-white px-8 py-4 rounded-xl mx-auto font-bold"
-                  >
-                    <RotateCcw size={18} /> Volver a Empezar
-                  </button>
+                  
+                  <div className="p-6 space-y-8">
+                    <section>
+                      <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <Info size={14} /> Identificación de Síntomas
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {selectedPathology.symptoms.map((s, i) => (
+                          <div key={i} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100 text-sm font-medium">
+                            <AlertCircle size={16} className="text-slate-400 mt-0.5 flex-shrink-0" />
+                            {s}
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+
+                    <section>
+                      <h4 className="text-xs font-black text-indigo-600 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <ShieldCheck size={14} /> Protocolo de Actuación
+                      </h4>
+                      <div className="space-y-4">
+                        {selectedPathology.actions.map((act, i) => (
+                          <div key={i} className="flex gap-4 group">
+                            <div className="flex flex-col items-center">
+                              <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-black text-xs shrink-0 z-10">
+                                {i + 1}
+                              </div>
+                              {i !== selectedPathology.actions.length - 1 && <div className="w-0.5 h-full bg-slate-100 -mt-1" />}
+                            </div>
+                            <div className="pb-6">
+                              <p className="font-black text-indigo-900 text-sm uppercase mb-1">{act.step}</p>
+                              <p className="text-sm text-slate-600 font-medium">{act.text}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  </div>
                 </div>
               ) : (
-                <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
-                  <div className="flex justify-between items-center mb-8">
-                    <span className="text-[10px] font-black uppercase text-indigo-600 tracking-tighter">Caso Clínico {currentQuestion + 1}</span>
-                    <div className="flex gap-1">
-                      {quiz.map((_, i) => (
-                        <div key={i} className={`h-1.5 w-6 rounded-full ${i === currentQuestion ? 'bg-indigo-500' : 'bg-slate-100'}`} />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="bg-slate-50 p-6 rounded-2xl border-l-4 border-indigo-400 mb-8 font-medium italic text-slate-700">
-                    "{quiz[currentQuestion].case}"
-                  </div>
-
-                  <div className="space-y-3">
-                    {quiz[currentQuestion].options.map((opt, i) => (
-                      <button 
-                        key={i}
-                        disabled={feedback !== null}
-                        onClick={() => handleAnswer(i)}
-                        className={`w-full p-4 rounded-xl text-left font-bold transition flex justify-between items-center ${
-                          feedback === null ? 'bg-white border-2 border-slate-100 hover:border-indigo-400' :
-                          i === quiz[currentQuestion].correct ? 'bg-emerald-50 border-2 border-emerald-500 text-emerald-700' :
-                          'bg-slate-50 border-2 border-transparent text-slate-400'
-                        }`}
-                      >
-                        <span className="text-sm">{opt}</span>
-                        {feedback !== null && i === quiz[currentQuestion].correct && <CheckCircle2 size={18} />}
-                      </button>
-                    ))}
-                  </div>
-
-                  {feedback && (
-                    <div className={`mt-6 p-4 rounded-xl flex gap-3 animate-in slide-in-from-top-2 ${feedback === 'correct' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-800'}`}>
-                      <Info size={20} className="flex-shrink-0" />
-                      <p className="text-sm font-medium">{quiz[currentQuestion].tip}</p>
-                    </div>
-                  )}
+                <div className="bg-white h-full rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-12 text-slate-400">
+                  <Stethoscope size={48} className="opacity-20 mb-4" />
+                  <p className="font-bold">Seleccione una patología del listado lateral</p>
+                  <p className="text-sm">Para visualizar el protocolo de intervención sanitaria</p>
                 </div>
               )}
             </div>
-          )}
-        </main>
+          </div>
+        ) : (
+          <div className="max-w-2xl mx-auto">
+            {!quizStarted ? (
+              <div className="bg-white p-12 rounded-3xl shadow-sm border border-slate-200 text-center">
+                <div className="w-20 h-20 bg-indigo-600 text-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl rotate-3">
+                  <Zap size={40} fill="currentColor" />
+                </div>
+                <h2 className="text-3xl font-black mb-4 text-slate-900">Evaluación de Casos</h2>
+                <p className="text-slate-500 mb-8 font-medium">Analiza la situación y selecciona la actuación prioritaria según los protocolos sanitarios oficiales.</p>
+                <button 
+                  onClick={() => setQuizStarted(true)}
+                  className="bg-indigo-600 text-white px-10 py-4 rounded-2xl font-black uppercase text-sm tracking-widest hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-200"
+                >
+                  Iniciar Simulación
+                </button>
+              </div>
+            ) : showResult ? (
+              <div className="bg-white p-12 rounded-3xl shadow-sm border border-slate-200 text-center">
+                <div className="text-6xl font-black text-indigo-600 mb-4">{Math.round((score/quiz.length)*100)}%</div>
+                <h3 className="text-2xl font-black mb-2">Simulación Finalizada</h3>
+                <p className="text-slate-500 mb-8">Has tomado {score} decisiones correctas de {quiz.length}.</p>
+                <button 
+                  onClick={() => {setQuizStarted(false); setShowResult(false); setScore(0); setCurrentQuestion(0);}}
+                  className="flex items-center gap-2 bg-slate-900 text-white px-8 py-4 rounded-xl mx-auto font-bold hover:bg-slate-800 transition-all"
+                >
+                  <RotateCcw size={18} /> Reintentar Entrenamiento
+                </button>
+              </div>
+            ) : (
+              <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-xs font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-widest">Caso {currentQuestion + 1} de {quiz.length}</span>
+                  <div className="flex gap-1">
+                    {quiz.map((_, i) => (
+                      <div key={i} className={`h-1.5 w-6 rounded-full ${i === currentQuestion ? 'bg-indigo-600' : 'bg-slate-100'}`} />
+                    ))}
+                  </div>
+                </div>
 
-        <footer className="mt-8 flex justify-center items-center gap-6 text-slate-400">
-          <div className="flex items-center gap-2">
-            <PhoneCall size={16} className="text-red-400" />
-            <span className="text-sm font-black">EMERGENCIAS 112</span>
+                <div className="bg-slate-50 p-6 rounded-2xl border-l-4 border-indigo-400 mb-8">
+                  <p className="text-lg font-bold text-slate-800 leading-tight">"{quiz[currentQuestion].case}"</p>
+                </div>
+
+                <div className="space-y-3">
+                  {quiz[currentQuestion].options.map((opt, i) => (
+                    <button
+                      key={i}
+                      disabled={feedback !== null}
+                      onClick={() => handleAnswer(i)}
+                      className={`w-full p-5 rounded-xl border-2 text-left font-bold transition-all flex items-center justify-between ${
+                        feedback === null ? 'border-slate-100 hover:border-indigo-500 hover:bg-indigo-50' : 
+                        i === quiz[currentQuestion].correct ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 
+                        feedback === 'incorrect' && i !== quiz[currentQuestion].correct ? 'border-slate-50 opacity-40' : 'border-slate-100'
+                      }`}
+                    >
+                      {opt}
+                      {feedback !== null && i === quiz[currentQuestion].correct && <CheckCircle2 size={20} className="text-emerald-600" />}
+                    </button>
+                  ))}
+                </div>
+
+                {feedback && (
+                  <div className={`mt-6 p-4 rounded-xl flex gap-3 animate-in slide-in-from-top-2 ${feedback === 'correct' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-800'}`}>
+                    <Info size={20} className="shrink-0" />
+                    <p className="text-sm font-medium">{quiz[currentQuestion].tip}</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-          <div className="flex items-center gap-2">
-            <Clock size={16} />
-            <span className="text-sm font-black">EL TIEMPO ES VIDA</span>
+        )}
+
+        <footer className="mt-12 pt-6 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <PhoneCall size={16} className="text-red-400" />
+              <span className="text-sm font-black">112 Emergencias</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Activity size={16} />
+              <span className="text-sm font-bold italic tracking-tighter">Primeros Auxilios FP</span>
+            </div>
           </div>
+          <p className="text-[10px] uppercase font-black tracking-widest">Módulo de Actuación Orgánica • RA2.G</p>
         </footer>
-
       </div>
     </div>
   );
