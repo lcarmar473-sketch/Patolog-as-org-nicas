@@ -24,16 +24,21 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // Adaptación de los iconos de Lucide para React en navegador
-        const Icon = ({ name, ...props }) => {
+        // Componente de Icono Corregido
+        const Icon = ({ name, className = "w-6 h-6", ...props }) => {
             useEffect(() => {
-                lucide.createIcons();
+                // Esto fuerza a Lucide a buscar nuevos iconos en el DOM después de renderizar
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
             }, [name]);
-            return <i data-lucide={name} {...props}></i>;
+
+            return <i data-lucide={name} className={className} {...props}></i>;
         };
 
         const App = () => {
             const [activeTab, setActiveTab] = useState('learning');
+            // Inicializamos con null, pero podrías poner pathologies[0] para que no salga vacío
             const [selectedPathology, setSelectedPathology] = useState(null);
             const [quizStarted, setQuizStarted] = useState(false);
             const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -46,9 +51,11 @@
                     id: 'cardio',
                     title: 'Urgencias Cardiovasculares',
                     subtitle: 'Infarto Agudo de Miocardio (IAM)',
-                    icon: <Icon name="heart" className="w-6 h-6" />,
+                    iconName: 'heart',
                     color: 'border-red-500',
                     bgColor: 'bg-red-50',
+                    textColor: 'text-red-500',
+                    barColor: 'bg-red-500',
                     symptoms: [
                         'Dolor opresivo retroesternal (centro del pecho).',
                         'Irradiación a brazo izquierdo, mandíbula o espalda.',
@@ -66,9 +73,11 @@
                     id: 'neuro',
                     title: 'Urgencias Neurológicas',
                     subtitle: 'Ictus / ACV',
-                    icon: <Icon name="brain" className="w-6 h-6" />,
+                    iconName: 'brain',
                     color: 'border-purple-500',
                     bgColor: 'bg-purple-50',
+                    textColor: 'text-purple-500',
+                    barColor: 'bg-purple-500',
                     symptoms: [
                         'Pérdida de fuerza súbita en un lado del cuerpo.',
                         'Desviación de la comisura bucal (boca torcida).',
@@ -86,9 +95,11 @@
                     id: 'resp',
                     title: 'Urgencias Respiratorias',
                     subtitle: 'Crisis Asmática / EPOC',
-                    icon: <Icon name="wind" className="w-6 h-6" />,
+                    iconName: 'wind',
                     color: 'border-blue-500',
                     bgColor: 'bg-blue-50',
+                    textColor: 'text-blue-500',
+                    barColor: 'bg-blue-500',
                     symptoms: [
                         'Disnea intensa (dificultad para respirar).',
                         'Sibilancias audibles (pitos) en la espiración.',
@@ -106,9 +117,11 @@
                     id: 'endo',
                     title: 'Urgencias Endocrinas',
                     subtitle: 'Crisis Glucémica (Hipoglucemia)',
-                    icon: <Icon name="droplet" className="w-6 h-6" />,
+                    iconName: 'droplet',
                     color: 'border-amber-500',
                     bgColor: 'bg-amber-50',
+                    textColor: 'text-amber-500',
+                    barColor: 'bg-amber-500',
                     symptoms: [
                         'Piel pálida, sudorosa y fría.',
                         'Temblor, hambre intensa y debilidad extrema.',
@@ -148,13 +161,13 @@
             const handleAnswer = (idx) => {
                 if (feedback !== null) return;
                 const isCorrect = idx === quiz[currentQuestion].correct;
-                if (isCorrect) setScore(score + 1);
+                if (isCorrect) setScore(prev => prev + 1);
                 setFeedback(isCorrect ? 'correct' : 'incorrect');
                 
                 setTimeout(() => {
                     setFeedback(null);
                     if (currentQuestion + 1 < quiz.length) {
-                        setCurrentQuestion(currentQuestion + 1);
+                        setCurrentQuestion(prev => prev + 1);
                     } else {
                         setShowResult(true);
                     }
@@ -187,8 +200,12 @@
                                 <div className="lg:col-span-4 space-y-3">
                                     <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest px-2">Patologías</h2>
                                     {pathologies.map((patho) => (
-                                        <button key={patho.id} onClick={() => setSelectedPathology(patho)} className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex items-center gap-4 ${selectedPathology?.id === patho.id ? 'border-indigo-500 bg-white shadow-md ring-4 ring-indigo-50' : 'border-white bg-white hover:border-slate-200 shadow-sm'}`}>
-                                            <div className={`p-2 rounded-xl ${patho.bgColor} ${patho.color.replace('border', 'text')}`}>{patho.icon}</div>
+                                        <button 
+                                            key={patho.id} 
+                                            onClick={() => setSelectedPathology(patho)} 
+                                            className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex items-center gap-4 ${selectedPathology?.id === patho.id ? 'border-indigo-500 bg-white shadow-md ring-4 ring-indigo-50' : 'border-white bg-white hover:border-slate-200 shadow-sm'}`}
+                                        >
+                                            <div className={`p-2 rounded-xl ${patho.bgColor} ${patho.textColor}`}><Icon name={patho.iconName} /></div>
                                             <div>
                                                 <p className="text-[10px] font-bold text-slate-400 uppercase leading-none mb-1">{patho.subtitle}</p>
                                                 <h3 className="font-black text-slate-800 text-sm leading-tight">{patho.title}</h3>
@@ -199,10 +216,10 @@
                                 <div className="lg:col-span-8">
                                     {selectedPathology ? (
                                         <div className="bg-white rounded-3xl shadow-xl overflow-hidden animate-in">
-                                            <div className={`h-2 ${selectedPathology.color.replace('border', 'bg')}`} />
+                                            <div className={`h-2 ${selectedPathology.barColor}`} />
                                             <div className="p-8">
                                                 <div className="flex items-center gap-3 mb-6">
-                                                    <span className={`p-3 rounded-2xl ${selectedPathology.bgColor} ${selectedPathology.color.replace('border', 'text')}`}>{selectedPathology.icon}</span>
+                                                    <span className={`p-3 rounded-2xl ${selectedPathology.bgColor} ${selectedPathology.textColor}`}><Icon name={selectedPathology.iconName} className="w-8 h-8" /></span>
                                                     <div>
                                                         <p className="text-xs font-black text-indigo-600 uppercase tracking-tighter leading-none mb-1">Ficha Técnica Sanitaria</p>
                                                         <h2 className="text-2xl font-black text-slate-800 tracking-tight">{selectedPathology.title}</h2>
@@ -223,7 +240,7 @@
                                     ) : (
                                         <div className="h-64 bg-white/50 border-2 border-dashed border-slate-200 rounded-3xl flex flex-col items-center justify-center text-center p-8">
                                             <div className="bg-white p-4 rounded-2xl shadow-sm mb-4"><Icon name="info" className="w-8 h-8 text-slate-300" /></div>
-                                            <p className="text-slate-400 font-black uppercase text-xs tracking-widest">Seleccione una patología</p>
+                                            <p className="text-slate-400 font-black uppercase text-xs tracking-widest">Seleccione una patología a la izquierda</p>
                                         </div>
                                     )}
                                 </div>
@@ -280,7 +297,7 @@
 
                     <footer className="max-w-5xl mx-auto px-6 mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 items-center text-center sm:text-left">
                         <div className="flex items-center justify-center sm:justify-start gap-3">
-                            <div className="bg-red-600 text-white p-2 rounded-lg animate-pulse"><Icon name="phone-call" size={16} /></div>
+                            <div className="bg-red-600 text-white p-2 rounded-lg animate-pulse"><Icon name="phone-call" className="w-4 h-4" /></div>
                             <div>
                                 <p className="text-[10px] font-black text-slate-400 uppercase leading-none">Emergencias</p>
                                 <p className="text-sm font-black text-slate-800">112</p>
